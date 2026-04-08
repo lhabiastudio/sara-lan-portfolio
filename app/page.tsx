@@ -1,101 +1,143 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { projects } from "@/lib/projects";
+import { useRef, useState, useMemo } from "react";
+import manifest from "@/lib/image-manifest.json";
+import HomeImagePreview from "@/components/HomeImagePreview";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const containerRef = useRef<HTMLElement>(null);
+  const rowsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const previewMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    const untypedManifest = manifest as Record<string, { dia?: string[], root?: string[] }>;
+    projects.forEach((proj) => {
+      if (proj.status === "published") {
+        const pManifest = untypedManifest[proj.slug];
+        if (pManifest) {
+          const img = pManifest['dia']?.[0] || pManifest['root']?.[0];
+          if (img) map[proj.slug] = img;
+        }
+      }
+    });
+    return map;
+  }, []);
+
+  const handleMouseEnter = (slug: string) => {
+    if (window.innerWidth <= 768) return; // Disable on mobile
+    const src = previewMap[slug];
+    if (src) {
+      setPreviewSrc(src);
+      gsap.to(previewRef.current, {
+        autoAlpha: 0.35,
+        duration: 0.6,
+        ease: "power2.out",
+        overwrite: true
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (window.innerWidth <= 768) return;
+    gsap.to(previewRef.current, {
+      autoAlpha: 0,
+      duration: 0.4,
+      ease: "power2.in",
+      overwrite: true
+    });
+  };
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.from(rowsRef.current, { 
+        y: 18, 
+        autoAlpha: 0, 
+        duration: 0.8, 
+        stagger: 0.09, 
+        ease: "power2.out", 
+        delay: 0.2 
+      });
+    });
+
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      gsap.from(rowsRef.current, { y: 18, autoAlpha: 0, duration: 0 });
+    });
+  }, { scope: containerRef });
+
+  return (
+    <main ref={containerRef} className="min-h-screen px-[var(--padding-x)] pt-[40vh]">
+      <HomeImagePreview ref={previewRef} src={previewSrc} />
+      <div className="mx-auto max-w-[var(--max-width)] relative z-10">
+        {projects.map((project, index) => {
+          const isPublished = project.status === "published";
+
+          return (
+            <div
+              key={project.slug}
+              ref={(el) => { rowsRef.current[index] = el; }}
+              data-cursor={isPublished ? "work" : "project"}
+              onMouseEnter={() => handleMouseEnter(project.slug)}
+              onMouseLeave={handleMouseLeave}
+              className={`group flex items-baseline justify-between py-[1.4rem] border-[var(--color-warm-gray)] border-b-[0.5px] ${
+                index === 0 ? "border-t-[0.5px]" : ""
+              }`}
+            >
+              {/* LEFT: Title */}
+              <div
+                className={`transition-transform duration-200 ease-out group-hover:translate-x-[6px] ${
+                  !isPublished ? "opacity-[0.35]" : ""
+                }`}
+              >
+                {isPublished ? (
+                  <Link
+                    href={`/${project.slug}`}
+                    className="font-display text-black no-underline italic italic font-light"
+                    style={{ fontSize: "clamp(20px, 3vw, 28px)" }}
+                  >
+                    {project.title}
+                  </Link>
+                ) : (
+                  <span
+                    className="font-display text-black italic italic font-light"
+                    style={{ fontSize: "clamp(20px, 3vw, 28px)" }}
+                  >
+                    {project.title}
+                  </span>
+                )}
+              </div>
+
+              {/* RIGHT: Year & Sections */}
+              <div className="flex items-center gap-[1rem]">
+                {project.sections.length > 0 && (
+                  <span className="font-body text-[8px] tracking-[4px] text-[var(--color-warm-gray)]">
+                    · · ·
+                  </span>
+                )}
+                <span className="font-body text-[10px] tracking-[0.1em] text-[var(--color-graphite)]">
+                  {project.year !== 0 ? project.year : "20XX"}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* FOOTER */}
+      <footer className="mx-auto max-w-[var(--max-width)] mt-[clamp(6rem,12vw,10rem)] pb-[3rem]">
+        <div className="border-t-[0.5px] border-[var(--color-ivory)] mb-[1.5rem]" />
+        <div className="flex justify-between font-body text-[10px] tracking-[0.14em] text-[var(--color-warm-gray)] uppercase">
+          <span>© Sara Lan</span>
+          <span>{new Date().getFullYear()}</span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
       </footer>
-    </div>
+    </main>
   );
 }
