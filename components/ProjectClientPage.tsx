@@ -118,8 +118,11 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
           <section
             key={section.id}
             id={section.id}
-            className="mx-auto max-w-[var(--max-width)] px-[var(--padding-x)] py-[5rem] border-b-[0.5px] border-[var(--color-ivory)]"
-            style={{ scrollMarginTop: 'calc(var(--nav-height) + 48px)' }}
+            className="mx-auto max-w-[var(--max-width)] border-b-[0.5px] border-[var(--color-ivory)]"
+            style={{ 
+              scrollMarginTop: 'calc(var(--nav-height) + 48px)',
+              padding: 'clamp(2rem, 6vw, 5rem) var(--padding-x)'
+            }}
           >
             <div className="mb-[2.5rem]">
               <span className="section-label inline-block font-body text-[10px] uppercase tracking-[0.2em] text-[var(--color-warm-gray)]">
@@ -168,7 +171,10 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
 
         {/* FALLBACK FOR NO SECTIONS (e.g. Cuba) */}
         {project.sections.length === 0 && rootImages.length > 0 && (
-          <section className="mx-auto max-w-[var(--max-width)] px-[var(--padding-x)] py-[5rem]">
+          <section 
+            className="mx-auto max-w-[var(--max-width)]"
+            style={{ padding: 'clamp(2rem, 6vw, 5rem) var(--padding-x)' }}
+          >
             <div className="grid grid-cols-2 gap-[6px]">
               {rootImages.map((img: string, i: number) => {
                 const isFullWidth = i % 3 === 0;

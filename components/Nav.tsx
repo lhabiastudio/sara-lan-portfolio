@@ -101,11 +101,15 @@ export default function Nav() {
       ref={containerRef}
       className="fixed top-0 left-0 right-0 z-[100] flex justify-between items-center"
       style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
         padding: "2.2rem var(--padding-x)",
-        opacity: isScrolled && !isMenuOpen ? 0.7 : 1,
-        background: "var(--color-paper)",
-        borderBottom: isScrolled ? "0.5px solid var(--color-ivory)" : "0.5px solid transparent",
-        transition: "opacity 300ms, border-color 300ms ease",
+        backgroundColor: 'var(--color-paper)',
+        borderBottom: isScrolled ? '0.5px solid var(--color-ivory)' : '0.5px solid transparent',
+        transition: 'border-color 300ms ease'
       }}
     >
       {/* Left - Signature */}
