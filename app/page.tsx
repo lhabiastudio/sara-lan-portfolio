@@ -89,7 +89,7 @@ export default function Home() {
               onTouchStart={() => {
                 if (!isPublished) return;
                 setPreviewSrc(previewMap[project.slug] ?? null);
-                const targetOpacity = 0.85;
+                const targetOpacity = window.innerWidth <= 768 ? 0.6 : 0.35;
                 gsap.to(previewRef.current, { 
                   autoAlpha: targetOpacity, 
                   duration: 0.4, 
@@ -113,6 +113,7 @@ export default function Home() {
               className={`group flex items-baseline justify-between py-[1.4rem] border-[var(--color-warm-gray)] border-b-[0.5px] ${
                 index === 0 ? "border-t-[0.5px]" : ""
               }`}
+              style={{ position: 'relative', zIndex: 1 }}
             >
               {/* LEFT: Title */}
               <div
@@ -124,14 +125,20 @@ export default function Home() {
                   <Link
                     href={`/${project.slug}`}
                     className="font-display text-black no-underline italic italic font-light"
-                    style={{ fontSize: "clamp(20px, 3vw, 28px)" }}
+                    style={{ 
+                      fontSize: "clamp(20px, 3vw, 28px)",
+                      textShadow: '0 0 20px var(--color-paper)'
+                    }}
                   >
                     {project.title}
                   </Link>
                 ) : (
                   <span
                     className="font-display text-black italic italic font-light"
-                    style={{ fontSize: "clamp(20px, 3vw, 28px)" }}
+                    style={{ 
+                      fontSize: "clamp(20px, 3vw, 28px)",
+                      textShadow: '0 0 20px var(--color-paper)'
+                    }}
                   >
                     {project.title}
                   </span>
