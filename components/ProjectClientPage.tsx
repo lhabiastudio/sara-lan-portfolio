@@ -119,6 +119,7 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
             key={section.id}
             id={section.id}
             className="mx-auto max-w-[var(--max-width)] px-[var(--padding-x)] py-[5rem] border-b-[0.5px] border-[var(--color-ivory)]"
+            style={{ scrollMarginTop: 'calc(var(--nav-height) + 48px)' }}
           >
             <div className="mb-[2.5rem]">
               <span className="section-label inline-block font-body text-[10px] uppercase tracking-[0.2em] text-[var(--color-warm-gray)]">

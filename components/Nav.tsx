@@ -82,7 +82,7 @@ export default function Nav() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 60) {
+      if (window.scrollY > 20) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -99,10 +99,13 @@ export default function Nav() {
   return (
     <nav 
       ref={containerRef}
-      className="fixed top-0 left-0 right-0 z-[100] flex justify-between items-center transition-opacity duration-300"
+      className="fixed top-0 left-0 right-0 z-[100] flex justify-between items-center"
       style={{
         padding: "2.2rem var(--padding-x)",
         opacity: isScrolled && !isMenuOpen ? 0.7 : 1,
+        background: "var(--color-paper)",
+        borderBottom: isScrolled ? "0.5px solid var(--color-ivory)" : "0.5px solid transparent",
+        transition: "opacity 300ms, border-color 300ms ease",
       }}
     >
       {/* Left - Signature */}
