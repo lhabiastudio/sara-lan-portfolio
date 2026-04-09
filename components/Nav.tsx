@@ -53,38 +53,27 @@ export default function Nav() {
   };
 
   const closeMenu = () => {
-    gsap.to(overlayLinksRef.current, {
-      y: 20,
-      autoAlpha: 0,
-      duration: 0.35,
-      stagger: { each: 0.06, from: "end" },
-      ease: "power2.in",
-      onComplete: () => {
-        setIsMenuOpen(false);
-        document.body.style.overflow = "";
-      }
-    });
-
-    gsap.to(overlayRef.current, {
-      autoAlpha: 0,
-      duration: 0.4,
-      ease: "power2.inOut",
-      delay: 0.2
-    });
+    setIsMenuOpen(false);
+    document.body.style.overflow = "";
   };
 
-  useGSAP(() => {
-    if (isMenuOpen) {
-      gsap.fromTo(overlayRef.current, 
-        { autoAlpha: 0 }, 
-        { autoAlpha: 1, duration: 0.4, ease: "power2.out" }
-      );
+  useEffect(() => {
+    if (isMenuOpen && overlayLinksRef.current.length > 0) {
       gsap.fromTo(overlayLinksRef.current,
         { y: 20, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.08, ease: "power2.out", delay: 0.1 }
+        { 
+          y: 0, 
+          autoAlpha: 1, 
+          duration: 0.5, 
+          stagger: 0.08, 
+          ease: 'power2.out',
+          delay: 0.1
+        }
       );
+    } else if (!isMenuOpen && overlayLinksRef.current.length > 0) {
+      gsap.set(overlayLinksRef.current, { y: 20, autoAlpha: 0 });
     }
-  }, { dependencies: [isMenuOpen], scope: containerRef });
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -184,7 +173,7 @@ export default function Nav() {
       </div>
       
       {/* Full-screen Overlay (Portal) */}
-      {isMenuOpen && mounted && createPortal(
+      {mounted && createPortal(
         <div 
           ref={overlayRef}
           className="bg-[var(--color-paper)]"
@@ -192,15 +181,17 @@ export default function Nav() {
             position: 'fixed',
             top: 0,
             left: 0,
-            right: 0,
-            bottom: 0,
             width: '100%',
             height: '100dvh',
+            backgroundColor: 'var(--color-paper)',
             zIndex: 9000,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            opacity: isMenuOpen ? 1 : 0,
+            pointerEvents: isMenuOpen ? 'auto' : 'none',
+            transition: 'opacity 0.35s ease',
           }}
         >
           {/* Close Button */}
