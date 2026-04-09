@@ -115,34 +115,25 @@ export default function Home() {
               }`}
               style={{ position: 'relative', zIndex: 1 }}
             >
+              {/* Clickable overlay for the entire row */}
+              {isPublished && (
+                <Link href={`/${project.slug}`} className="absolute inset-0 z-10" aria-label={project.title} />
+              )}
               {/* LEFT: Title */}
               <div
                 className={`transition-transform duration-200 ease-out group-hover:translate-x-[6px] ${
                   !isPublished ? "opacity-[0.35]" : ""
                 }`}
               >
-                {isPublished ? (
-                  <Link
-                    href={`/${project.slug}`}
-                    className="font-display text-black no-underline italic italic font-light"
-                    style={{ 
-                      fontSize: "clamp(20px, 3vw, 28px)",
-                      textShadow: '0 0 20px var(--color-paper)'
-                    }}
-                  >
-                    {project.title}
-                  </Link>
-                ) : (
-                  <span
-                    className="font-display text-black italic italic font-light"
-                    style={{ 
-                      fontSize: "clamp(20px, 3vw, 28px)",
-                      textShadow: '0 0 20px var(--color-paper)'
-                    }}
-                  >
-                    {project.title}
-                  </span>
-                )}
+                <span
+                  className="font-display text-black italic font-light"
+                  style={{ 
+                    fontSize: "clamp(20px, 3vw, 28px)",
+                    textShadow: '0 0 20px var(--color-paper)'
+                  }}
+                >
+                  {project.title}
+                </span>
               </div>
 
               {/* RIGHT: Year & Sections */}
