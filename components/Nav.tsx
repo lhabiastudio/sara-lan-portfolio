@@ -107,7 +107,9 @@ export default function Nav() {
         right: 0,
         zIndex: 100,
         padding: "2.2rem var(--padding-x)",
-        backgroundColor: 'var(--color-paper)',
+        backgroundColor: 'rgba(250, 249, 246, 0.82)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         borderBottom: isScrolled ? '0.5px solid var(--color-ivory)' : '0.5px solid transparent',
         transition: 'border-color 300ms ease'
       }}
