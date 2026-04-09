@@ -126,7 +126,7 @@ export default function Home() {
                 }`}
               >
                 <span
-                  className="font-display text-black italic font-light"
+                  className="font-display text-black italic font-light select-none"
                   style={{ 
                     fontSize: "clamp(20px, 3vw, 28px)",
                     textShadow: '0 0 20px var(--color-paper)'
