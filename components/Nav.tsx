@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
@@ -15,6 +16,11 @@ export default function Nav() {
   const linksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const overlayLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isProjectPage = 
     pathname !== "/" && 
@@ -176,17 +182,36 @@ export default function Nav() {
           <div className="w-[18px] h-[1px] bg-[var(--color-ink)] transition-transform duration-300 group-hover:translate-x-[2px]"></div>
         </button>
       </div>
-
-      {/* Full-screen Overlay */}
-      {isMenuOpen && (
+      
+      {/* Full-screen Overlay (Portal) */}
+      {isMenuOpen && mounted && createPortal(
         <div 
           ref={overlayRef}
-          className="fixed inset-0 z-[200] bg-[var(--color-paper)] flex flex-col items-center justify-center"
+          className="bg-[var(--color-paper)]"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            height: '100dvh',
+            zIndex: 9000,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         >
           {/* Close Button */}
           <button 
             onClick={closeMenu}
-            className="absolute top-[2.2rem] right-[var(--padding-x)] w-[18px] h-[18px] flex items-center justify-center"
+            className="w-[18px] h-[18px] flex items-center justify-center"
+            style={{
+              position: 'absolute',
+              top: 'max(env(safe-area-inset-top), 1.8rem)',
+              right: 'var(--padding-x)',
+            }}
             data-cursor="project"
             aria-label="Close Menu"
           >
@@ -235,7 +260,8 @@ export default function Nav() {
               Contact
             </Link>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </nav>
   );
