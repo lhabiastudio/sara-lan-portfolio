@@ -62,21 +62,8 @@ Este fotozine explora lo que sería un día cualquiera en esta tumultuosa ciudad
     year: 2022,
     status: 'published',
     bodyText: '',
-    coverImage: (manifest as Record<string, { root?: string[], merca?: string[] }>)['el-corte-ingles']?.['root']?.[0] ?? '',
-    sections: [
-      {
-        id: 'root',
-        label: 'El corte inglés',
-        images: (manifest as Record<string, { root?: string[] }>)['el-corte-ingles']?.['root'] ?? [],
-        text: ''
-      },
-      {
-        id: 'merca',
-        label: 'Merca',
-        images: (manifest as Record<string, { merca?: string[] }>)['el-corte-ingles']?.['merca'] ?? [],
-        text: ''
-      }
-    ]
+    coverImage: (manifest as Record<string, { root?: string[] }>)['el-corte-ingles']?.['root']?.[0] ?? '',
+    sections: []
   },
   {
     slug: 'tenerife',

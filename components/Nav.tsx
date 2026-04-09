@@ -109,7 +109,7 @@ export default function Nav() {
       <Link
         ref={sigRef}
         href="/"
-        className="font-display text-[18px] font-light italic text-[var(--color-ink)]"
+        className="font-display text-[18px] font-light italic text-[var(--color-ink)] whitespace-nowrap"
         data-cursor="project"
         onClick={isMenuOpen ? closeMenu : undefined}
       >
@@ -118,8 +118,9 @@ export default function Nav() {
 
       {/* Right - Links or Hamburger */}
       <div className="flex items-center gap-[2.5rem]">
-        {!isProjectPage ? (
-          <>
+        {/* Standard Links: Visible on Desktop of non-project pages */}
+        {!isProjectPage && (
+          <div className="hidden md:flex items-center gap-[2.5rem]">
             <Link
               ref={(el) => { linksRef.current[0] = el; }}
               href="/"
@@ -152,18 +153,19 @@ export default function Nav() {
             >
               Contact
             </Link>
-          </>
-        ) : (
-          <button 
-            onClick={openMenu}
-            className="flex flex-col gap-[5px] items-end group"
-            data-cursor="project"
-            aria-label="Open Menu"
-          >
-            <div className="w-[18px] h-[1px] bg-[var(--color-ink)] transition-transform duration-300 group-hover:translate-x-[-2px]"></div>
-            <div className="w-[18px] h-[1px] bg-[var(--color-ink)] transition-transform duration-300 group-hover:translate-x-[2px]"></div>
-          </button>
+          </div>
         )}
+
+        {/* Hamburger: Visible on all project pages OR on mobile of all other pages */}
+        <button 
+          onClick={openMenu}
+          className={`flex-col gap-[5px] items-end group ${isProjectPage ? 'flex' : 'flex md:hidden'}`}
+          data-cursor="project"
+          aria-label="Open Menu"
+        >
+          <div className="w-[18px] h-[1px] bg-[var(--color-ink)] transition-transform duration-300 group-hover:translate-x-[-2px]"></div>
+          <div className="w-[18px] h-[1px] bg-[var(--color-ink)] transition-transform duration-300 group-hover:translate-x-[2px]"></div>
+        </button>
       </div>
 
       {/* Full-screen Overlay */}

@@ -73,7 +73,7 @@ export default function Home() {
   }, { scope: containerRef });
 
   return (
-    <main ref={containerRef} className="min-h-screen px-[var(--padding-x)] pt-[40vh]">
+    <main ref={containerRef} className="min-h-screen px-[var(--padding-x)] pt-[clamp(35vh,45vh,50vh)]">
       <HomeImagePreview ref={previewRef} src={previewSrc} />
       <div className="mx-auto max-w-[var(--max-width)] relative z-10">
         {projects.map((project, index) => {
@@ -86,6 +86,30 @@ export default function Home() {
               data-cursor={isPublished ? "work" : "project"}
               onMouseEnter={() => handleMouseEnter(project.slug)}
               onMouseLeave={handleMouseLeave}
+              onTouchStart={() => {
+                if (!isPublished) return;
+                setPreviewSrc(previewMap[project.slug] ?? null);
+                const targetOpacity = 0.85;
+                gsap.to(previewRef.current, { 
+                  autoAlpha: targetOpacity, 
+                  duration: 0.4, 
+                  ease: 'power2.out' 
+                });
+              }}
+              onTouchEnd={() => {
+                gsap.to(previewRef.current, { 
+                  autoAlpha: 0, 
+                  duration: 0.4, 
+                  ease: 'power2.in' 
+                });
+              }}
+              onTouchCancel={() => {
+                gsap.to(previewRef.current, { 
+                  autoAlpha: 0, 
+                  duration: 0.4, 
+                  ease: 'power2.in' 
+                });
+              }}
               className={`group flex items-baseline justify-between py-[1.4rem] border-[var(--color-warm-gray)] border-b-[0.5px] ${
                 index === 0 ? "border-t-[0.5px]" : ""
               }`}

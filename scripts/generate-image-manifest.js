@@ -14,7 +14,7 @@ const projects = [
   },
   {
     slug: "el-corte-ingles",
-    sections: ["root", "merca"],
+    sections: ["root"],
   },
   {
     slug: "tenerife",
