@@ -52,8 +52,14 @@ export default function ProjectNav({ sections }: ProjectNavProps) {
 
   return (
     <nav 
-      className="sticky z-[50] flex gap-[2.5rem] px-[var(--padding-x)] pt-[3rem] pb-[1.2rem]"
-      style={{ top: "64px" }}
+      className="sticky z-[50] flex gap-[2.5rem] px-[var(--padding-x)]"
+      style={{ 
+        top: "var(--nav-height)",
+        background: "var(--color-paper)",
+        backdropFilter: "none",
+        paddingTop: "0.8rem",
+        paddingBottom: "0.8rem"
+      }}
     >
       {sections.map((section) => (
         <button

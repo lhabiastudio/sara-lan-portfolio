@@ -21,6 +21,7 @@
 
   --max-width: 1200px;
   --padding-x: clamp(1.5rem, 5vw, 4rem);
+  --nav-height: 64px;
 }
 
 body {

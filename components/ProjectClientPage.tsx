@@ -87,7 +87,7 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
   return (
     <main ref={containerRef} className="min-h-screen bg-[var(--color-paper)]">
       {/* A. OPENING */}
-      <section className="mx-auto max-w-[800px] px-[var(--padding-x)] pt-[clamp(8rem,15vw,12rem)]">
+      <section className="mx-auto max-w-[800px] px-[var(--padding-x)] pt-[calc(var(--nav-height)*2+2rem)] md:pt-[clamp(8rem,15vw,12rem)]">
         <h1
           ref={titleRef}
           className="font-display italic font-light text-[var(--color-ink)]"
@@ -102,7 +102,7 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
         <div className="mt-[3rem] border-t-[0.5px] border-[var(--color-warm-gray)]" />
 
         <div className="mt-[2rem] max-w-[560px]">
-          <p ref={bodyRef} className="whitespace-pre-line font-body text-[14px] leading-[1.9] text-[var(--color-graphite)]">
+          <p ref={bodyRef} className="whitespace-pre-line font-body text-[14px] leading-[1.65] md:leading-[1.9] text-[var(--color-graphite)]">
             {project.bodyText}
           </p>
         </div>
