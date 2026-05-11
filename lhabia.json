@@ -1,0 +1,13 @@
+{
+  "name": "sara-lan-portfolio",
+  "display_name": "Sara Lan Portfolio",
+  "category": "client",
+  "phase": "BUILD",
+  "phase_started": "2026-05-10",
+  "next_step": {
+    "text": "Review BUILD phase artifacts and define concrete next action.",
+    "requires_human": true
+  },
+  "tags": [],
+  "archived": false
+}
